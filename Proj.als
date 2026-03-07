@@ -42,6 +42,10 @@ fact maxAlunosPorProjeto{
     all p:Projeto | #p.alunos <= p.vagas
 }
 
+fact listaSempreAssociada {
+    all l:ListaDeCandidatos | one p:Projeto | p.lista = l
+}
+
 -- cada projeto tem entre 1 e 4 vagas
 fact vagas{
     all p:Projeto | 0 < p.vagas and p.vagas <= 4
@@ -59,6 +63,11 @@ fact naListaDeCandidatos{
     a in p.lista.alunosNaLista.elems
 }
 
+fact listasUnicas {
+    all disj p1, p2: Projeto |
+        p1.lista != p2.lista
+}
+
 -- ordem de entrada dos alunos
 fact ordemDeEntrada{
     all p:Projeto |
@@ -70,6 +79,7 @@ fact alunosParticipandoEmProjetoComAreasDeConhecimentoJáPagas{
     all a:Aluno | all p:Projeto | a in p.lista.alunosNaLista.elems =>
     some d: a.disciplinasPaga | d.area = p.areaPesquisa.area
 }
+
 
 -- existem exatamente 3 areas de pesquisa
 fact {
@@ -97,9 +107,23 @@ assert minVagasEmProjeto{
 assert maxAlunosEmProjeto{
     all p:Projeto | #p.alunos <=4
 }
+assert listaExclusiva {
+    all p1, p2:Projeto | p1 != p2 => p1.lista != p2.lista
+}
 
+check listaExclusiva for 6
 check menosAlunosQueVaga for 6
 check maxAlunosEmProjeto for 6
 check maxVagasEmProjeto for 6
 check minVagasEmProjeto for 6
 run {} for 3
+
+--Predicados
+pred alunoEmMaisDeUmaLista {
+    some a:Aluno |
+        some disj p1,p2:Projeto |
+            a in p1.lista.alunosNaLista.elems and
+            a in p2.lista.alunosNaLista.elems
+}
+
+run alunoEmMaisDeUmaLista for 6
