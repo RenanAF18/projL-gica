@@ -29,7 +29,9 @@ sig Aluno{
 }
 
 -- define a lista que armazena os alunos interessados em ingressar em um determinado projeto
-sig ListaDeCandidatos{}
+sig ListaDeCandidatos{
+    lista: seq Aluno
+}
 ----------------------------------------------------------------------------------------------
 
 fact maxAlunosPorProjeto{
@@ -44,7 +46,7 @@ fact alunoEmNoMaximoUmProjeto{
 }
 fact naListaDeCandidatos{
     all a:Aluno | all p:Projeto | a in p.alunos =>
-    a in p.lista
+    a in p.lista.alunos
 }
 fact alunosParticipandoEmProjetoComAreasDeConhecimentoJáPagas{
     all a:Aluno | all p:Projeto | a in p.lista.alunos =>
