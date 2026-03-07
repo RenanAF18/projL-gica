@@ -85,6 +85,10 @@ fact alunosParticipandoEmProjetoComAreasDeConhecimentoJáPagas{
 fact {
     #AreaPesquisa = 3
 }
+fact areasDePesquisaDistintas {
+    all disj ap1, ap2: AreaPesquisa |
+        ap1.area != ap2.area
+}
 
 -- forma de preenchimento das vagas usando a lista de candidatos
 fact filaPreencheVagas {
