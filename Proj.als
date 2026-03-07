@@ -1,11 +1,20 @@
+-- define um conjunto de areas
 sig AreaConhecimento{}
+
+-- define as areas específicas
 sig AreaPesquisa{
     area: one AreaConhecimento
 }
+
+-- representa as materias cursadas pelos alunos
 sig Disciplina{
     area: one AreaConhecimento
 }
+
+-- define o conjunto de professores do departamento
 sig Professor{}
+
+-- projeto central que tem as regras de negocio do sistema de pesquisa
 sig Projeto{
     professor: one Professor,
     areaPesquisa: one AreaPesquisa,
@@ -14,11 +23,14 @@ sig Projeto{
     vagas: one Int
 }
 
+-- representa os alunos do curso
 sig Aluno{
     disciplinasPaga: set Disciplina
 }
 
+-- define a lista que armazena os alunos interessados em ingressar em um determinado projeto
 sig ListaDeCandidatos{}
+----------------------------------------------------------------------------------------------
 
 fact maxAlunosPorProjeto{
     all p:Projeto | #p.alunos <= p.vagas
@@ -30,20 +42,25 @@ fact vagas{
 fact alunoEmNoMaximoUmProjeto{
     all a:Aluno | lone p:Projeto | a in p.alunos
 }
-fact alunosEmProjetoComAreasDeConhecimentoJáPagas{
-    all a:Aluno | all p:Projeto | a in p.alunos =>
-    some d: a.disciplinasPaga | d.area = p.areaPesquisa.area
-}
 fact naListaDeCandidatos{
     all a:Aluno | all p:Projeto | a in p.alunos =>
     a in p.lista
 }
-
+fact alunosParticipandoEmProjetoComAreasDeConhecimentoJáPagas{
+    all a:Aluno | all p:Projeto | a in p.lista.alunos =>
+    some d: a.disciplinasPaga | d.area = p.areaPesquisa.area
+}
 fact {
     #AreaPesquisa = 3
 }
+fact seNalistaEComVagasEntaoNoProjeto{
+    all p:Projeto | (#p.alunos < p.vagas) => no 
+    (p.lista.alunos - p.alunos)
+}
 
-
+assert maisAlunosQueVaga{
+    all p:Projeto | #p.alunos > #p.vagas
+}
 assert alunosEmProjetosMenorQueVagas{
     all p:Projeto | #p.alunos < p.vagas
 }
@@ -58,6 +75,7 @@ assert minVagasEmProjeto{
 assert maxAlunosEmProjeto{
     all p:Projeto | #p.alunos <=4
 }
+check maisAlunosQueVaga for 6
 check maxAlunosEmProjeto for 6
 check maxVagasEmProjeto for 6
 check minVagasEmProjeto for 6
