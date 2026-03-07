@@ -1,3 +1,5 @@
+-- Aqui começa a parte Estrutural de Modelo Alloy
+
 -- define um conjunto de areas
 sig AreaConhecimento{}
 
@@ -30,10 +32,11 @@ sig Aluno{
 
 -- define a lista que armazena os alunos interessados em ingressar em um determinado projeto
 sig ListaDeCandidatos{
-    lista: seq Aluno
+    alunosNaLista: seq Aluno
 }
 ----------------------------------------------------------------------------------------------
 
+-- Aqui começa os Fatos 
 fact maxAlunosPorProjeto{
     all p:Projeto | #p.alunos <= p.vagas
 }
@@ -46,25 +49,31 @@ fact alunoEmNoMaximoUmProjeto{
 }
 fact naListaDeCandidatos{
     all a:Aluno | all p:Projeto | a in p.alunos =>
-    a in p.lista.alunos
+    a in p.lista.alunosNaLista.elems
+}
+fact ordemDeEntrada{
+    all p:Projeto |
+        #p.lista.alunosNaLista = #(p.lista.alunosNaLista.elems)
 }
 fact alunosParticipandoEmProjetoComAreasDeConhecimentoJáPagas{
-    all a:Aluno | all p:Projeto | a in p.lista.alunos =>
+    all a:Aluno | all p:Projeto | a in p.lista.alunosNaLista.elems =>
     some d: a.disciplinasPaga | d.area = p.areaPesquisa.area
 }
 fact {
     #AreaPesquisa = 3
 }
-fact seNalistaEComVagasEntaoNoProjeto{
-    all p:Projeto | (#p.alunos < p.vagas) => no 
-    (p.lista.alunos - p.alunos)
+fact filaPreencheVagas {
+    all p:Projeto |
+        all i: p.lista.alunosNaLista.inds |
+            i < p.vagas implies
+                p.lista.alunosNaLista[i] in p.alunos
 }
 
-assert maisAlunosQueVaga{
-    all p:Projeto | #p.alunos > #p.vagas
-}
-assert alunosEmProjetosMenorQueVagas{
-    all p:Projeto | #p.alunos < p.vagas
+----------------------------------------------------------------------------------------------
+
+-- ASSERTS E CHECKS
+assert menosAlunosQueVaga{
+    all p:Projeto | #p.alunos <= p.vagas
 }
 assert maxVagasEmProjeto{
     all p:Projeto | p.vagas <=4
@@ -72,12 +81,11 @@ assert maxVagasEmProjeto{
 assert minVagasEmProjeto{
     all p:Projeto | p.vagas >= 1
 }
-
-
 assert maxAlunosEmProjeto{
     all p:Projeto | #p.alunos <=4
 }
-check maisAlunosQueVaga for 6
+
+check menosAlunosQueVaga for 6
 check maxAlunosEmProjeto for 6
 check maxVagasEmProjeto for 6
 check minVagasEmProjeto for 6
