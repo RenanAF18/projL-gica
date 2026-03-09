@@ -1,4 +1,12 @@
--- Aqui começa a parte Estrutural de Modelo Alloy ---------------------------------------------
+/* * SISTEMA DE GERENCIAMENTO DE PROJETOS DE PESQUISA
+ * Disciplina: Lógica Para Computação
+ * Objetivo: Modelar a alocação de alunos em projetos acadêmicos via fila de espera.
+ */
+
+-- ----------------------------------------------------------------------------
+-- ESTRUTURA DO MODELO (ASSINATURAS)
+-- Define as entidades e os relacionamentos básicos do sistema.
+-- ----------------------------------------------------------------------------
 
 -- define um conjunto de areas
 sig AreaConhecimento{}
@@ -35,13 +43,17 @@ sig ListaDeCandidatos{
     alunosNaLista: seq Aluno
 }
 
--- Aqui começa os Fatos ----------------------------------------------------------------------
+-- ----------------------------------------------------------------------------
+-- PARTE 2: FATOS (REGRAS DE NEGÓCIO)
+-- Restrições que garantem que o sistema opere conforme as normas do curso.
+-- ----------------------------------------------------------------------------
 
 -- nenhum projeto pode ter mais alunos do que vagas
 fact maxAlunosPorProjeto{
     all p:Projeto | #p.alunos <= p.vagas
 }
 
+-- garante que toda lista de candidatos pertença a exato um projeto
 fact listaSempreAssociada {
     all l:ListaDeCandidatos | one p:Projeto | p.lista = l
 }
@@ -50,7 +62,6 @@ fact listaSempreAssociada {
 fact vagas{
     all p:Projeto | 0 < p.vagas and p.vagas <= 4
 }
-
 
 -- um aluno participa de no msximo um projeto
 fact alunoEmNoMaximoUmProjeto{
@@ -63,6 +74,7 @@ fact naListaDeCandidatos{
     a in p.lista.alunosNaLista.elems
 }
 
+-- garante que um projeto tenha sua lista exclusiva
 fact listasUnicas {
     all disj p1, p2: Projeto |
         p1.lista != p2.lista
@@ -98,23 +110,37 @@ fact filaPreencheVagas {
                 p.lista.alunosNaLista[i] in p.alunos
 }
 
---  Aqui começa os ASSERTS e CHECKS -------------------------------------------------------------------------
+-- ----------------------------------------------------------------------------
+-- PARTE 3: VERIFICAÇÕES (ASSERTIONS E CHECKS)
+-- Testes automáticos para validar se as regras não geram estados inconsistentes.
+-- ----------------------------------------------------------------------------
+
+-- Valida se a ocupação respeita o limite de vagas
 assert menosAlunosQueVaga{
     all p:Projeto | #p.alunos <= p.vagas
 }
+
+-- Valida o teto de 4 vagas por projeto.
 assert maxVagasEmProjeto{
     all p:Projeto | p.vagas <=4
 }
+
+-- Valida o piso de pelo menos 1 vaga por projeto
 assert minVagasEmProjeto{
     all p:Projeto | p.vagas >= 1
 }
+
+-- Valida se o número total de alunos participantes nunca excede 4
 assert maxAlunosEmProjeto{
     all p:Projeto | #p.alunos <=4
 }
+
+-- Valida a relação um-para-um entre projetos e listas
 assert listaExclusiva {
     all p1, p2:Projeto | p1 != p2 => p1.lista != p2.lista
 }
 
+-- Execução dos testes
 check listaExclusiva for 6
 check menosAlunosQueVaga for 6
 check maxAlunosEmProjeto for 6
@@ -122,7 +148,11 @@ check maxVagasEmProjeto for 6
 check minVagasEmProjeto for 6
 run {} for 3
 
---Predicados
+-- ----------------------------------------------------------------------------
+-- PARTE 4: PREDICADOS (CENÁRIOS)
+-- ----------------------------------------------------------------------------
+
+-- simula se é possível um aluno estar em listas de espera de projetos diferentes
 pred alunoEmMaisDeUmaLista {
     some a:Aluno |
         some disj p1,p2:Projeto |
