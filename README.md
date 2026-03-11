@@ -7,7 +7,7 @@
 |---|---|
 | **Disciplina** | Lógica Para Computação |
 | **Professor** | Salatiel Dantas |
-| **Instituição** | Universidade Estadual da Paraíba (UEPB) |
+| **Instituição** | Universidade Federal de Campina Grande (UFCG) |
 ---
 
 ## 👥 Integrantes
@@ -23,7 +23,7 @@ Observações para a Equipe:
 - Qualquer alteração na lógica dos fatos deve ser comunicada previamente no grupo de comunicação da equipe.
 ---
 ## **Projeto:**
-### O curso de Ciência da Computação deseja gerenciar a inscrição de alunos em projetos de pesquisa oferecidos por professores do departamento. Cada projeto de pesquisa está associado a exatamente um professor responsável, mas um professor pode orientar vários projetos simultaneamente. O curso considera um conjunto fixo de 3 áreas de pesquisa principais, e cada projeto está vinculado a exatamente uma dessas áreas. Cada projeto possui capacidade limitada, oferecendo no máximo 4 vagas para alunos participantes. Um aluno pode participar de, no máximo, um projeto de pesquisa por semestre letivo. Os alunos podem se inscrever em projetos cuja área esteja relacionada a uma disciplina na qual já tenham sido aprovados anteriormente. Para cada projeto existe uma lista de candidatos. Sempre que houver vaga disponível em um projeto, ela deve ser preenchida por um dos alunos da lista de candidatos correspondente, caso existam candidatos aguardando. Não é permitido que um projeto tenha mais alunos participantes do que o seu limite de vagas, nem que um aluno participe de um projeto para o qual não tenha realizado inscrição prévia.
+> "O curso de Ciência da Computação deseja gerenciar a inscrição de alunos em projetos de pesquisa oferecidos por professores do departamento. Cada projeto de pesquisa está associado a exatamente um professor responsável, mas um professor pode orientar vários projetos simultaneamente. O curso considera um conjunto fixo de 3 áreas de pesquisa principais, e cada projeto está vinculado a exatamente uma dessas áreas. Cada projeto possui capacidade limitada, oferecendo no máximo 4 vagas para alunos participantes. Um aluno pode participar de, no máximo, um projeto de pesquisa por semestre letivo. Os alunos podem se inscrever em projetos cuja área esteja relacionada a uma disciplina na qual já tenham sido aprovados anteriormente. Para cada projeto existe uma lista de candidatos. Sempre que houver vaga disponível em um projeto, ela deve ser preenchida por um dos alunos da lista de candidatos correspondente, caso existam candidatos aguardando. Não é permitido que um projeto tenha mais alunos participantes do que o seu limite de vagas, nem que um aluno participe de um projeto para o qual não tenha realizado inscrição prévia."
 
 ## **Descrição do Problema:**
 O curso de Ciência da Computação deseja gerenciar a inscrição de alunos em projetos de pesquisa oferecidos por professores do departamento. As principais regras do sistema são:
@@ -36,6 +36,16 @@ O curso de Ciência da Computação deseja gerenciar a inscrição de alunos em 
 - A seleção é feita por ordem de inscrição (**fila de candidatos**).
 - Não é permitido que um projeto tenha mais alunos do que seu limite de vagas, nem que um aluno participe sem inscrição prévia.
 ---
+## Estrutura do Repositório
+
+```
+projLogica/
+├── Projeto_alloy     # Especificação formal em Alloy
+├── README.md         # Documentação do projeto
+```
+
+---
+
 ## 1. Sobre o Projeto
 Este projeto consiste em uma especificação formal utilizando a linguagem Alloy para modelar o sistema de inscrição de alunos em projetos de pesquisa de um departamento de Ciência da Computação.
 
